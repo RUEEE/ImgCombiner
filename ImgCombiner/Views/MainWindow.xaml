@@ -31,8 +31,12 @@
 
                     <!-- 顶部：选择文件夹 -->
                     <Border BorderBrush="#DDD" BorderThickness="0,0,0,1" Padding="10">
-                        <DockPanel LastChildFill="True">
-                            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
                                 <Button Content="添加文件夹" Padding="12,6" Margin="0,0,10,0"
                         Command="{Binding AddFolderCommand}"/>
                                 <CheckBox Content="递归子文件夹" Margin="0,0,10,0"
@@ -41,7 +45,7 @@
                           IsChecked="{Binding HideAlreadyTargetFormat}"/>
                             </StackPanel>
 
-                            <ItemsControl ItemsSource="{Binding SelectedFolders}">
+                            <ItemsControl Grid.Row="1" ItemsSource="{Binding SelectedFolders}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel/>
@@ -52,7 +56,6 @@
                                         <Border Background="#F3F3F3" BorderBrush="#DDD" BorderThickness="1" CornerRadius="4" Padding="6" Margin="4">
                                             <DockPanel>
                                                 <TextBlock Text="{Binding Converter={StaticResource FolderShort}}" ToolTip="{Binding}" Margin="0,0,8,0"/>
-                                                <!-- 修复点：Command 绑定到当前 ConvertViewModel -->
                                                 <Button Content="x" Width="18" Height="18" Padding="0"
                                 ToolTip="从列表移除此文件夹（不会删除磁盘文件）"
                                 Command="{Binding DataContext.RemoveFolderCommand, RelativeSource={RelativeSource AncestorType=Grid}}"
@@ -62,7 +65,7 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                        </DockPanel>
+                        </Grid>
                     </Border>
 
                     <!-- 中间：左树右预览 -->
