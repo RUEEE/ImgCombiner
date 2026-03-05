@@ -257,49 +257,77 @@
                             <TextBlock Text="{Binding CurrentPageTitle}" FontWeight="SemiBold" Margin="0,4,0,0"/>
                         </StackPanel>
 
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                            <ItemsControl ItemsSource="{Binding CurrentPageGroups}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border BorderBrush="#DDD" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,10">
-                                            <StackPanel>
-                                                <DockPanel>
-                                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold"/>
-                                                    <CheckBox DockPanel.Dock="Right" Content="本组仅保留最大分辨率，其余回收站"
-                                    IsChecked="{Binding IsActionEnabled}"/>
-                                                </DockPanel>
+                        <ListBox Grid.Row="1"
+        ItemsSource="{Binding CurrentPageGroups}"
+         ScrollViewer.VerticalScrollBarVisibility="Auto"
+         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+         ScrollViewer.CanContentScroll="True"
+         ScrollViewer.PanningMode="VerticalOnly"
+         VirtualizingPanel.IsVirtualizing="True"
+         VirtualizingPanel.VirtualizationMode="Recycling"
+         PreviewMouseWheel="DedupListBox_ForceScroll_PreviewMouseWheel">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
 
-                                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Margin="0,8,0,0">
-                                                    <ItemsControl ItemsSource="{Binding Items}">
-                                                        <ItemsControl.ItemsPanel>
-                                                            <ItemsPanelTemplate>
-                                                                <StackPanel Orientation="Horizontal"/>
-                                                            </ItemsPanelTemplate>
-                                                        </ItemsControl.ItemsPanel>
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <Border BorderBrush="#EEE" BorderThickness="1" CornerRadius="4" Padding="6" Margin="0,0,10,0" Width="280">
-                                                                    <StackPanel>
-                                                                        <Image Source="{Binding Thumbnail}" Height="120" Stretch="Uniform"/>
+                            <!-- 去掉默认选中高亮(可选) -->
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="Margin" Value="0,0,0,10"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
 
-                                                                        <TextBlock Text="{Binding Path, Converter={StaticResource FileShort}}"
-                                                                                    ToolTip="{Binding Path}"
-                                                                                    Margin="0,6,0,0"
-                                                                                    TextWrapping="Wrap"
-                                                                                    MaxHeight="36"/>
-                                                                        <TextBlock Text="{Binding Meta}" Foreground="#666" FontSize="12" Margin="0,4,0,0"/>
-                                                                    </StackPanel>
-                                                                </Border>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
-                                                </ScrollViewer>
-                                            </StackPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
+                            <ListBox.ItemTemplate>
+                                <!-- 这里放你原来的 ItemsControl.ItemTemplate 内容 -->
+                                <DataTemplate>
+                                    <Border BorderBrush="#DDD" BorderThickness="1" CornerRadius="6" Padding="10">
+                                        <StackPanel>
+                                            <DockPanel>
+                                                <TextBlock Text="{Binding Title}" FontWeight="SemiBold"/>
+                                                <CheckBox DockPanel.Dock="Right"
+                                  Content="本组仅保留最大分辨率，其余回收站"
+                                  IsChecked="{Binding IsActionEnabled}"/>
+                                            </DockPanel>
+
+                                            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                                VerticalScrollBarVisibility="Disabled"
+                                                Margin="0,8,0,0">
+                                                <ItemsControl ItemsSource="{Binding Items}">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <StackPanel Orientation="Horizontal"/>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border BorderBrush="#EEE" BorderThickness="1" CornerRadius="4"
+                                            Padding="6" Margin="0,0,10,0" Width="280">
+                                                                <StackPanel>
+                                                                    <Image Source="{Binding Thumbnail}" Height="120" Stretch="Uniform"/>
+                                                                    <TextBlock Text="{Binding Path, Converter={StaticResource FileShort}}"
+                                                       ToolTip="{Binding Path}"
+                                                       Margin="0,6,0,0"
+                                                       TextWrapping="Wrap"
+                                                       MaxHeight="36"/>
+                                                                    <TextBlock Text="{Binding Meta}" Foreground="#666" FontSize="12" Margin="0,4,0,0"/>
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </ScrollViewer>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </Grid>
 
                     <!-- 底部：分页 + 全选/全不选 + 执行删除 + 进度 -->
